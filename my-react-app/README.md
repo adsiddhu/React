@@ -147,6 +147,88 @@ React.createElement("h1", null, "Hello");
 - **Transpiler** → Converts **Same Language Different Version** (ES6 → ES5)
 - **Babel** → **Technically a Transpiler**, but often called a **JavaScript Compiler**
 
+---
+
+# 📦 npm vs npx
+
+In the world of **Node.js and React**, you may often see **npm** and **npx**.  
+They look similar, but they serve **different purposes**.
+
+---
+
+## 🔹 npm
+
+**npm** stands for **Node Package Manager**.  
+
+It is used to:
+
+- Install packages locally or globally
+- Manage project dependencies
+- Run scripts defined in `package.json`
+
+### Examples:
+
+```bash
+npm install react        # Install React locally
+npm install -g vite      # Install Vite globally
+npm run dev              # Run a script from package.json
+```
+
+### Simple Idea:
+
+```
+npm → installs and manages packages
+```
+
+---
+
+## 🔹 npx
+
+**npx** comes with npm (v5.2+).  
+
+It is used to **execute packages without installing them globally**.
+
+### Examples:
+
+```bash
+npx create-react-app my-app    # Run CRA without installing globally
+npx vite my-app                # Run Vite without installing globally
+```
+
+### Simple Idea:
+
+```
+npx → runs packages directly, no global install needed
+```
+
+---
+
+## 🔹 Key Difference
+
+| Feature | npm | npx |
+|---------|-----|-----|
+| Purpose | Install/manage packages | Run packages without global install |
+| Installs globally? | Can install globally | Runs directly without global install |
+| Example | `npm install react` | `npx create-react-app my-app` |
+
+---
+
+## 🧠 Easy Way to Remember
+
+```
+npm = install and manage packages
+npx = run packages immediately
+```
+
+
+
+
+
+
+
+
+
+
 
 
 ---
