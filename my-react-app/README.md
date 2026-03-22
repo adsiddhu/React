@@ -220,17 +220,6 @@ npm = install and manage packages
 npx = run packages immediately
 ```
 
-
-
-
-
-
-
-
-
-
-
-
 ---
 # ✨ Named Export vs Default Export
 
@@ -1140,3 +1129,383 @@ count++;
 ```
 State should only be updated using the setter function provided by React.
 ```
+
+# useEffect Hook
+
+## 🧠 What is useEffect?
+
+`useEffect` is a React Hook used to handle **side effects** in functional components.
+
+### Examples of side effects:
+
+* API calls
+* DOM updates
+* Timers (setInterval, setTimeout)
+
+---
+
+## 📦 Basic Syntax
+
+```jsx
+useEffect(() => {
+  // code to run
+}, [dependencies]);
+```
+
+---
+# useEffect – Step by Step Explanation
+---
+
+## ✅ Code
+
+```javascript
+import React, { useEffect } from "react";
+
+function App() {
+  useEffect(() => {
+    console.log("Component mounted!");
+  }, []);
+
+  return <h1>Hello World</h1>;
+}
+
+export default App;
+```
+
+---
+
+## 🧠 Step-by-Step Execution
+
+### 🔹 1. Component starts
+
+```javascript
+function App()
+```
+
+👉 React starts rendering this component
+
+---
+
+### 🔹 2. JSX is prepared
+
+```javascript
+return <h1>Hello World</h1>;
+```
+
+👉 React prepares:
+
+```
+Hello World
+```
+
+But it **does NOT show it immediately yet**
+
+---
+
+### 🔹 3. Component gets added to the screen (Mounted)
+
+👉 Now React:
+
+* puts `<h1>Hello World</h1>` into the browser
+* user can see it 👀
+
+---
+
+## 💡 What is "Mount"?
+
+👉 **Mount = when component appears on the screen for the first time**
+
+### Simple meaning:
+
+* App starts → component shows → ✅ mounted
+
+---
+
+## 🔹 4. `useEffect` runs
+
+```javascript
+useEffect(() => {
+  console.log("Component mounted!");
+}, []);
+```
+
+👉 This runs **AFTER the component is mounted**
+
+So console shows:
+
+```
+Component mounted!
+```
+
+---
+
+## 🎯 Why only once?
+
+Because of this:
+
+```javascript
+[]
+```
+
+👉 Empty dependency array means:
+
+> “Run this effect only once after first render”
+
+---
+
+## 🔁 What if no `[]`?
+
+```javascript
+useEffect(() => {
+  console.log("runs every time");
+});
+```
+
+👉 Runs:
+
+* on first render
+* on every re-render ❌
+
+---
+
+## 🧠 Easy Real-Life Example
+
+Think of it like:
+
+* You open an app 📱
+* Screen loads (component mounts)
+* Then something happens once (like a welcome message)
+
+👉 That “something” = `useEffect` with `[]`
+
+---
+
+## 🧾 Timeline (very important)
+
+```
+1. Component function runs
+2. UI is prepared
+3. UI is shown on screen (Mounted)
+4. useEffect runs (because of [])
+```
+
+---
+
+## 🚀 One-Line Summary
+
+👉 **"onMount" means: run something once when the component first appears on the screen**
+
+# useEffect Without Dependency Array
+
+## 💡 Simple Explanation
+
+👉 Without `[]`:
+
+> “Run this again and again whenever anything updates”
+
+---
+
+## 🚀 One-line Summary
+
+👉 No `[]` = run after every render (again and again)
+
+---
+
+# 🔹 1. `useEffect` with Dependency `[count]`
+
+## ✅ Example
+
+```javascript
+import React, { useState, useEffect } from "react";
+
+function App() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    console.log("Count changed:", count);
+  }, [count]); // 👈 dependency
+
+  return (
+    <div>
+      <h1>{count}</h1>
+      <button onClick={() => setCount(count + 1)}>Click</button>
+    </div>
+  );
+}
+
+export default App;
+```
+
+---
+
+## 🧠 What does `[count]` mean?
+
+👉 It means:
+
+> “Run this effect whenever `count` changes”
+
+---
+
+## 🔁 Step-by-step flow
+
+```
+1. Component loads → effect runs once
+2. Click button → count changes
+3. Component re-renders
+4. useEffect runs again (because count changed)
+```
+
+---
+
+## 🎯 Simple Rule
+
+| Dependency | Behavior                 |
+| ---------- | ------------------------ |
+| `[]`       | Run only once (on mount) |
+| `[count]`  | Run when `count` changes |
+| no array   | Run on every render      |
+
+---
+
+## 💡 Real-life example
+
+👉 Like watching a variable:
+
+* If `count` changes → react to it
+* If not → do nothing
+
+---
+
+# 🔹 2. Cleanup Function (Unmount)
+
+## ✅ Example
+
+```javascript
+import React, { useEffect } from "react";
+
+function App() {
+  useEffect(() => {
+    console.log("Component mounted");
+
+    return () => {
+      console.log("Component unmounted");
+    };
+  }, []);
+
+  return <h1>Hello</h1>;
+}
+
+export default App;
+```
+
+---
+
+## 🧠 What is "Unmount"?
+
+👉 **Unmount = when component is removed from screen**
+
+### Example:
+
+* Navigate to another page
+* Hide component
+* App refresh
+
+---
+
+## 🔁 Flow
+
+```
+1. Component appears → "mounted"
+2. Later removed → "unmounted"
+```
+
+---
+
+## 🔥 What is Cleanup Function?
+
+```javascript
+return () => {
+  console.log("Component unmounted");
+};
+```
+
+👉 This runs when:
+
+* component is removed
+* OR before next effect runs
+
+---
+
+## 💡 Real-life example
+
+Think:
+
+* You start something → timer ⏱️ / event listener 🎧
+* You must stop it when leaving ❗
+
+👉 Cleanup = "stop everything before leaving"
+
+---
+
+## 🧪 Practical Example (Timer)
+
+```javascript
+useEffect(() => {
+  const interval = setInterval(() => {
+    console.log("Running...");
+  }, 1000);
+
+  return () => {
+    clearInterval(interval); // ✅ cleanup
+  };
+}, []);
+```
+
+---
+
+## 🚨 Why cleanup is important
+
+Without cleanup:
+
+* memory leaks 💥
+* duplicate timers ❌
+* performance issues 😵
+
+---
+
+# 🧠 Final Summary
+
+## useEffect types:
+
+```javascript
+// 1. Run once
+useEffect(() => {}, []);
+
+// 2. Run on dependency change
+useEffect(() => {}, [count]);
+
+// 3. Cleanup
+useEffect(() => {
+  return () => {};
+}, []);
+```
+
+---
+
+# 🚀 Super Simple Understanding
+
+* **Mount** → component appears
+* **Update** → state/props change
+* **Unmount** → component disappears
+
+---
+
+## 🎯 Summary
+
+| Dependency | Behavior               |
+| ---------- | ---------------------- |
+| `[]`       | Run once (on mount)    |
+| `[value]`  | Run when value changes |
+| No array   | Run on every render    |
+
+---
